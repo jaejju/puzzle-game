@@ -20,8 +20,35 @@
       matchedPairs: 0,
       attemptCount: 0,
       isChecking: false,
+      isGameOver: false,
+      timeRemaining: 90,
       message: "카드를 두 장 뒤집어보세요.",
     };
+
+    let timerId = null;
+
+    function stopTimer() {
+      if (timerId !== null) {
+        clearInterval(timerId);
+        timerId = null;
+      }
+    }
+
+    function startTimer() {
+      stopTimer();
+      timerId = setInterval(function () {
+        if (state.isGameOver) return;
+        state.timeRemaining -= 1;
+        if (state.timeRemaining <= 0) {
+          state.timeRemaining = 0;
+          state.isGameOver = true;
+          state.message = "시간 초과! 게임 오버입니다.";
+          state.isChecking = true;
+          stopTimer();
+        }
+        notify();
+      }, 1000);
+    }
 
     function notify() {
       onChange(state);
@@ -40,6 +67,8 @@
       }
 
       state.message = "축하합니다. 모든 짝을 맞췄습니다.";
+      state.isGameOver = true;
+      stopTimer();
       notify();
       return true;
     }
@@ -92,7 +121,8 @@
         !clickedCard ||
         clickedCard.flipped ||
         clickedCard.matched ||
-        state.isChecking
+        state.isChecking ||
+        state.isGameOver
       ) {
         return;
       }
@@ -116,7 +146,10 @@
       state.cards = createCards();
       state.matchedPairs = 0;
       state.attemptCount = 0;
+      state.timeRemaining = 90;
+      state.isGameOver = false;
       state.message = "카드를 두 장 뒤집어보세요.";
+      startTimer();
       notify();
     }
 
@@ -132,7 +165,8 @@
       game.state.message,
       game.state.attemptCount,
       game.state.matchedPairs,
-      TOTAL_PAIRS
+      TOTAL_PAIRS,
+      game.state.timeRemaining
     );
     renderBoard(game.state.cards, game.state.isChecking, game.handleCardClick);
   }
