@@ -1,5 +1,5 @@
 (function () {
-  const FRUITS = ["🍎", "🍌", "🍇", "🍉", "🍒", "🍑", "🍍", "🥝"];
+  const FRUITS = ["🍎", "🍌", "🍇", "🍉", "🍒", "🍑", "🍍", "🥝", "🍓", "🥭", "🍈", "🍐", "🍊", "🍋", "🥥", "🍅", "🍈", "🍐"];
   const TOTAL_PAIRS = FRUITS.length;
   const FLIP_BACK_DELAY_MS = 900;
 
